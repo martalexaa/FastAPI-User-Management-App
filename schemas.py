@@ -1,4 +1,7 @@
-#Use schemas to define input/output types
+# schemas.py is for defining data validation and serialization using Pydantic models
+# Validate request data (e.g. input for creating or updating a user)
+# Control what data is returned in responses (e.g. hiding passwords)
+# Ensure type safety between API and database layers.
 from pydantic import BaseModel, EmailStr, constr, field_validator
 from typing import Annotated, Optional
 import re

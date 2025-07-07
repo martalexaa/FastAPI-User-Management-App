@@ -1,3 +1,6 @@
+# Define the app entry point for running with uvicorn
+# Create the FastAPI app instance
+# Include routers (like users.py) to organize endpoints
 from fastapi import FastAPI
 from database import Base, engine
 from routes import users

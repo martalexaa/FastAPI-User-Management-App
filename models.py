@@ -1,3 +1,6 @@
+# models.py is to define the database structure using SQLAlchemy models. 
+# Each class (e.g. User) represents a table, and each class attribute (e.g. name, email) 
+# represents a column in that table.
 from sqlalchemy import Column, Integer, String
 from database import Base
 

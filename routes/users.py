@@ -1,3 +1,8 @@
+# In routes/users.py, I define API endpoints related to users.
+# HTTP routes (e.g., @router.get, @router.post)
+# Functions that handle user operations, like create, read, update, delete
+# Dependency injection (e.g., getting the DB session)
+# Connecting schemas with CRUD logic to serve client requests.
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import crud, schemas
