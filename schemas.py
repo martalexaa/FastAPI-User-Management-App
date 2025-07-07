@@ -37,8 +37,7 @@ class UserPasswordUpdate(BaseModel):
     password: PasswordStr
 
 class UserDelete(UserBase):
-    name: NameStr
-    email: EmailStr
+    id: int
 
 class UserOut(UserBase):
     id: int
@@ -54,3 +53,7 @@ class UserRead(UserBase):
     model_config = {
         "from_attributes": True
     }
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str

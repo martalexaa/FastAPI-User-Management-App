@@ -5,24 +5,27 @@ from sqlalchemy.orm import Session
 from models import User
 from fastapi import HTTPException
 import schemas
+from utils import hash_password
+from passlib.hash import bcrypt
 
-#List all users from the database
+# List all users from the database
 def get_users(db: Session):
     return db.query(User).all()
 
-#Creata a new user with username, email and password, add it to the database
+# Creata a new user with username, email and password, add it to the database
 def create_user(db: Session, user: schemas.UserCreate):
-    db_user = User(name=user.name, email=user.email, password=user.password)
+    hashed_password = hash_password(user.password)
+    db_user = User(name=user.name, email=user.email, password=hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
 
-#Find a user by its unique ID in the database
+# Find a user by its unique ID in the database
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
     
-#Find a user by ID and update its name and email, then update the database
+# Find a user by ID and update its name and email, then update the database
 def update_user(db: Session, user_id: int, new_name: str = None, new_email: str = None):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -37,7 +40,7 @@ def update_user(db: Session, user_id: int, new_name: str = None, new_email: str 
     db.refresh(user)
     return user
 
-#Find a user by ID and update its password
+# Find a user by ID and update its password
 def update_user_password(db: Session, user_id: int, new_password: str):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -48,7 +51,7 @@ def update_user_password(db: Session, user_id: int, new_password: str):
     db.refresh(user)
     return user
 
-#Find a user by ID and delete it, commit the change to the database
+# Find a user by ID and delete it, commit the change to the database
 def delete_user(db: Session, user_id: int):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -56,3 +59,12 @@ def delete_user(db: Session, user_id: int):
     db.delete(user)
     db.commit()
     return {"message": f"Deleted user {user.name}"}
+
+# User authentication
+def authenticate_user(db: Session, email: str, password: str):
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        return None
+    if not bcrypt.verify(password, user.password):
+        return None
+    return user
